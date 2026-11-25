@@ -1,0 +1,17 @@
+# Trace dùng cho ảnh screenshots/jaeger-*.png (chụp 2026-11-25 ~11:02Z, chaos MOCK_SLOW_RATE=0.3 MOCK_ERROR_RATE=0.2, Locust 30 users)
+== slow trace_id=e3ab584e8953383136ccf531f47aee73 instance=99d126011515
+   POST /ask                      1724.4 ms  status={}  {'http.status_code': '200'}  
+   agent.run                      1722.2 ms  status={}  {}  
+   agent.retrieve_context           23.3 ms  status={}  {}  
+   chat mock-llm-small            1698.6 ms  status={}  {'gen_ai.operation.name': 'chat', 'gen_ai.provider.name': 'mock', 'gen_ai.request.model': 'mock-llm-small', 'gen_ai.usage.input_tokens': '95', 'gen_ai.usage.output_tokens': '55'}  
+   -- log lines:
+   {"ts": "2026-11-25T11:01:40.647561+00:00", "level": "INFO", "service": "observable-agent", "instance": "99d126011515", "event": "llm_call", "trace_id": "e3ab584e8953383136ccf531f47aee73", "span_id": "c7c3aab9fe055193", "request_id": "822073e7836c", "model": "mock-llm-small", "agent_version": "v2", "input_tokens": 95, "output_tokens": 55, "cost_usd": 4.7e-05, "llm_ms": 1697.6}
+   {"ts": "2026-11-25T11:01:40.648125+00:00", "level": "INFO", "service": "observable-agent", "instance": "99d126011515", "event": "http_request", "trace_id": "e3ab584e8953383136ccf531f47aee73", "span_id": "c7c3aab9fe055193", "request_id": "822073e7836c", "method": "POST", "route": "/ask", "status": 200, "ms": 1723.6}
+== err trace_id=58ed196ea62227c1bc23fbcb9b36cf52 instance=306f41915981
+   POST /ask                       847.6 ms  status={'code': 2}  {'http.status_code': '503'}  
+   agent.run                       845.9 ms  status={'message': 'LLMError: Upstream LLM error: 503 Service Unavailable (mock)', 'code': 2}  {}  ['exception:Upstream LLM error: 503 Service Unavailable (mock)']
+   agent.retrieve_context           21.2 ms  status={}  {}  
+   chat mock-llm-small             824.2 ms  status={'message': 'LLMError: Upstream LLM error: 503 Service Unavailable (mock)', 'code': 2}  {'gen_ai.operation.name': 'chat', 'gen_ai.provider.name': 'mock', 'gen_ai.request.model': 'mock-llm-small'}  ['exception:Upstream LLM error: 503 Service Unavailable (mock)']
+   -- log lines:
+   {"ts": "2026-11-25T11:02:09.941843+00:00", "level": "INFO", "service": "observable-agent", "instance": "306f41915981", "event": "llm_error", "trace_id": "58ed196ea62227c1bc23fbcb9b36cf52", "span_id": "41552234f999c02a", "request_id": "734420a56604", "error": "Upstream LLM error: 503 Service Unavailable (mock)"}
+   {"ts": "2026-11-25T11:02:09.942174+00:00", "level": "INFO", "service": "observable-agent", "instance": "306f41915981", "event": "http_request", "trace_id": "58ed196ea62227c1bc23fbcb9b36cf52", "span_id": "41552234f999c02a", "request_id": "734420a56604", "method": "POST", "route": "/ask", "status": 503, "ms": 847.1}

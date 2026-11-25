@@ -15,6 +15,12 @@
 | `part7/trace_log_lines.txt` | Dòng log JSON có cùng `trace_id` với 2 trace trên |
 | `part7/alert_timeline.txt`, `prometheus_alerts_api.json` | Exercise 7.6 — mốc thời gian inactive → pending → firing |
 | `part7/promtool_test_rules.txt` | Unit test alert rules (SUCCESS) |
+| `part3_render_selftest.txt` | Part 3: 4 lệnh CP6 trên URL Render (200/200/401/200) và rate limit 429 (key không in ra) |
+| `part7/ex71_metrics.txt` | Exercise 7.1: Counter/Gauge/Histogram và metric mới `agent_question_length_chars` |
+| `part7/ex74_prometheus_queries.txt` | Exercise 7.4: p95/avg, req/s theo instance, tokens/s, `curl :8080/metrics` → 404 |
+| `part7/screenshot_traces.txt` | Span và log của trace chậm `e3ab584e…` và trace lỗi `58ed196e…` trong ảnh Jaeger |
+| `part7/prometheus_alerts_api_screenshot.json` | Trạng thái alert lúc chụp `prometheus-alert-firing.png` |
+| `part7/experiment_D_timeline.txt` | Thí nghiệm D: `docker pause` 1 instance → `AgentInstanceDown` firing sau ~45 s |
 
 Ghi chú môi trường:
 - Cổng 8000 trên máy đang bận nên app Part 1/4/5 develop chạy ở cổng 8010.

@@ -1,0 +1,21 @@
+$ curl -s -X POST http://localhost:8012/ask -H "Content-Type: application/json" -d {"question": "Prometheus thu thập metrics như thế nào?"}
+{"answer":"Prometheus pull metrics bằng cách scrape endpoint /metrics theo chu kỳ. Counter chỉ tăng (đếm request), Gauge lên xuống (request đang xử lý), Histogram chia latency vào các bucket để tính percentile bằng histogram_quantile.","model":"mock-llm-small","agent_version":"v2","usage":{"input_tokens":91,"output_tokens":55,"cost_usd":4.665e-05},"llm_latency_ms":145.8,"request_id":"94f6ee4aab23"}
+$ curl -s http://localhost:8012/metrics | grep -v "^#"  (trích)
+http_requests_total{method="GET",route="/health",status="200"} 1.0
+http_requests_total{method="POST",route="/ask",status="200"} 1.0
+http_request_duration_seconds_count{method="POST",route="/ask"} 1.0
+http_request_duration_seconds_sum{method="POST",route="/ask"} 0.18408659999840893
+agent_in_flight_requests 0.0
+llm_tokens_total{model="mock-llm-small",type="input"} 91.0
+llm_tokens_total{model="mock-llm-small",type="output"} 55.0
+llm_cost_usd_total{model="mock-llm-small"} 4.6649999999999996e-05
+agent_question_length_chars_bucket{le="20.0"} 0.0
+agent_question_length_chars_bucket{le="50.0"} 1.0
+agent_question_length_chars_bucket{le="100.0"} 1.0
+agent_question_length_chars_bucket{le="200.0"} 1.0
+agent_question_length_chars_bucket{le="500.0"} 1.0
+agent_question_length_chars_bucket{le="1000.0"} 1.0
+agent_question_length_chars_bucket{le="2000.0"} 1.0
+agent_question_length_chars_bucket{le="+Inf"} 1.0
+agent_question_length_chars_count 1.0
+agent_question_length_chars_sum 40.0

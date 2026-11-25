@@ -1,0 +1,29 @@
+# CP6 self-test — 2026-11-25T11:08:19Z — BASE=https://production-ai-agent-bss8.onrender.com (key không in ra)
+$ curl -sS -o /dev/null -w '%{http_code}' $BASE/health
+200
+$ ... $BASE/ready
+200
+$ ... -X POST $BASE/ask (không key)
+401
+$ ... -X POST $BASE/ask -H X-API-Key
+200
+
+$ curl -s $BASE/health
+{"status":"ok","environment":"production"}
+$ curl -s $BASE/ready
+{"status":"ready","redis":"ok"}
+$ curl -s -X POST $BASE/ask -H X-API-Key ... -d '{"user_id":"test","question":"Hello"}'
+{"question":"Hello","answer":"Tôi là AI agent được deploy lên cloud. Câu hỏi của bạn đã được nhận.","cost_usd":1.035e-05}
+# Rate limit: 12 request liên tiếp (RATE_LIMIT_PER_MINUTE=10)
+req 1 -> 200
+req 2 -> 200
+req 3 -> 200
+req 4 -> 200
+req 5 -> 200
+req 6 -> 200
+req 7 -> 200
+req 8 -> 200
+req 9 -> 429
+req 10 -> 429
+req 11 -> 429
+req 12 -> 429

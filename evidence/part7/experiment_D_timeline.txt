@@ -1,0 +1,8 @@
+[11:15:15Z] Thí nghiệm D: Locust 30 users, MOCK mặc định (SLOW 0.03, ERROR 0.01), 3 instance
+[11:15:15Z] trước khi pause: alerts={'LLMCostBurnRateHigh': 'pending'} locust(req,fail)=(7624, 270)
+[11:15:15Z] T0: docker pause k5-day14-observability-agent-1
+[11:15:15Z] +  0.0s alerts={'LLMCostBurnRateHigh': 'pending'}
+[11:15:30Z] + 15.0s alerts={'AgentInstanceDown(172.19.0.2:8000)': 'pending', 'LLMCostBurnRateHigh': 'firing'}
+[11:16:00Z] + 45.0s alerts={'AgentInstanceDown(172.19.0.2:8000)': 'firing', 'LLMCostBurnRateHigh': 'firing'}
+[11:16:00Z] locust(req,fail)=(8312,302) errors={"HTTPError('502 Server Error: Bad Gateway for url: /ask')": 192, "HTTPError('502 Server Error: Bad Gateway for url: /health')": 13, "HTTPError('503 Server Error: Service Unavailable for url: /ask')": 69, "HTTPError('504 Server Error: Gateway Time-out for url: /ask')": 28}
+[11:16:00Z] docker unpause agent-1
