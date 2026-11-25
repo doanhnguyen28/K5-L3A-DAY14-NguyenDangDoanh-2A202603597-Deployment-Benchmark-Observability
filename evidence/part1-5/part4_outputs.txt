@@ -1,0 +1,95 @@
+(cổng 8000 bận → chạy ở 8010; token đã được che)
+### Exercise 4.1 — API key (develop)
+$ curl -i -X POST /ask (không có key)
+HTTP/1.1 401 Unauthorized
+date: Wed, 25 Nov 2026 08:23:01 GMT
+server: uvicorn
+content-length: 67
+content-type: application/json
+
+{"detail":"Missing API key. Include header: X-API-Key: <your-key>"}
+$ curl -i -X POST /ask -H "X-API-Key: wrong"
+HTTP/1.1 403 Forbidden
+date: Wed, 25 Nov 2026 08:23:01 GMT
+server: uvicorn
+content-length: 29
+content-type: application/json
+
+{"detail":"Invalid API key."}
+$ curl -i -X POST /ask -H "X-API-Key: secret-key-123"
+HTTP/1.1 500 Internal Server Error
+date: Wed, 25 Nov 2026 08:23:01 GMT
+server: uvicorn
+content-length: 21
+content-type: text/plain; charset=utf-8
+
+Internal Server Error
+HTTP/1.1 200 OK
+date: Wed, 25 Nov 2026 08:23:01 GMT
+server: uvicorn
+content-length: 114
+content-type: application/json
+
+{"question":"Hello","answer":"Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé."}
+
+### Exercise 4.2 — JWT (production)
+$ curl -i -X POST /auth/token -d {"username":"student","password":"demo123"}
+HTTP/1.1 200 OK
+date: Wed, 25 Nov 2026 08:23:02 GMT
+server: uvicorn
+content-length: 307
+content-type: application/json
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-xss-protection: 1; mode=block
+referrer-policy: strict-origin-when-cross-origin
+
+{"access_token":"eyJ***REDACTED***","token_type":"bearer","expires_in_minutes":60,"hint":"Include in header: Authorization: Bearer eyJhbGciOiJIUzI1NiIs..."}
+
+$ curl -i -X POST /ask (không token)
+HTTP/1.1 401 Unauthorized
+date: Wed, 25 Nov 2026 08:23:02 GMT
+server: uvicorn
+www-authenticate: Bearer
+content-length: 76
+content-type: application/json
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-xss-protection: 1; mode=block
+referrer-policy: strict-origin-when-cross-origin
+
+{"detail":"Authentication required. Include: Authorization: Bearer <token>"}
+$ curl -i -X POST /ask -H "Authorization: Bearer $TOKEN"
+HTTP/1.1 200 OK
+date: Wed, 25 Nov 2026 08:23:02 GMT
+server: uvicorn
+content-length: 192
+content-type: application/json
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-xss-protection: 1; mode=block
+referrer-policy: strict-origin-when-cross-origin
+
+{"question":"Explain JWT","answer":"Tôi là AI agent được deploy lên cloud. Câu hỏi của bạn đã được nhận.","usage":{"requests_remaining":9,"budget_remaining_usd":1.9e-05}}
+
+### Exercise 4.3 — Rate limiting: gọi 20 lần liên tiếp
+req  1 -> 200  {"question":"Test 1","answer":"Đây là câu trả lời từ AI agent (mock). Trong production, đây sẽ là response từ OpenAI/Anthropic.","usage":{"requ
+req  2 -> 200  {"question":"Test 2","answer":"Đây là câu trả lời từ AI agent (mock). Trong production, đây sẽ là response từ OpenAI/Anthropic.","usage":{"requ
+req  3 -> 200  {"question":"Test 3","answer":"Tôi là AI agent được deploy lên cloud. Câu hỏi của bạn đã được nhận.","usage":{"requests_remaining":6,"budg
+req  4 -> 200  {"question":"Test 4","answer":"Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé.","usage":{"requests_remaining":5,"budget_remai
+req  5 -> 200  {"question":"Test 5","answer":"Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé.","usage":{"requests_remaining":4,"budget_remai
+req  6 -> 200  {"question":"Test 6","answer":"Tôi là AI agent được deploy lên cloud. Câu hỏi của bạn đã được nhận.","usage":{"requests_remaining":3,"budg
+req  7 -> 200  {"question":"Test 7","answer":"Đây là câu trả lời từ AI agent (mock). Trong production, đây sẽ là response từ OpenAI/Anthropic.","usage":{"requ
+req  8 -> 200  {"question":"Test 8","answer":"Đây là câu trả lời từ AI agent (mock). Trong production, đây sẽ là response từ OpenAI/Anthropic.","usage":{"requ
+req  9 -> 200  {"question":"Test 9","answer":"Đây là câu trả lời từ AI agent (mock). Trong production, đây sẽ là response từ OpenAI/Anthropic.","usage":{"requ
+req 10 -> 429 retry-after: 58 {"detail":{"error":"Rate limit exceeded","limit":10,"window_seconds":60,"retry_after_seconds":58}}
+req 11 -> 429 retry-after: 58 {"detail":{"error":"Rate limit exceeded","limit":10,"window_seconds":60,"retry_after_seconds":58}}
+req 12 -> 429 retry-after: 58 {"detail":{"error":"Rate limit exceeded","limit":10,"window_seconds":60,"retry_after_seconds":58}}
+req 13 -> 429 retry-after: 58 {"detail":{"error":"Rate limit exceeded","limit":10,"window_seconds":60,"retry_after_seconds":58}}
+req 14 -> 429 retry-after: 58 {"detail":{"error":"Rate limit exceeded","limit":10,"window_seconds":60,"retry_after_seconds":58}}
+req 15 -> 429 retry-after: 57 {"detail":{"error":"Rate limit exceeded","limit":10,"window_seconds":60,"retry_after_seconds":57}}
+req 16 -> 429 retry-after: 57 {"detail":{"error":"Rate limit exceeded","limit":10,"window_seconds":60,"retry_after_seconds":57}}
+req 17 -> 429 retry-after: 57 {"detail":{"error":"Rate limit exceeded","limit":10,"window_seconds":60,"retry_after_seconds":57}}
+req 18 -> 429 retry-after: 57 {"detail":{"error":"Rate limit exceeded","limit":10,"window_seconds":60,"retry_after_seconds":57}}
+req 19 -> 429 retry-after: 57 {"detail":{"error":"Rate limit exceeded","limit":10,"window_seconds":60,"retry_after_seconds":57}}
+req 20 -> 429 retry-after: 57 {"detail":{"error":"Rate limit exceeded","limit":10,"window_seconds":60,"retry_after_seconds":57}}

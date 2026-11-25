@@ -1,0 +1,46 @@
+{
+    "status": "success",
+    "data": {
+        "alerts": [
+            {
+                "labels": {
+                    "alertname": "AgentHighErrorRate",
+                    "severity": "critical"
+                },
+                "annotations": {
+                    "description": "Error rate hi\u00e1\u00bb\u2021n t\u00e1\u00ba\u00a1i: 20.34% (SLO: < 5%)",
+                    "summary": "Error rate /ask v\u00c6\u00b0\u00e1\u00bb\u00a3t 5%"
+                },
+                "state": "firing",
+                "activeAt": "2026-11-25T08:15:42.401817116Z",
+                "value": "2.0336934405066756e-01"
+            },
+            {
+                "labels": {
+                    "alertname": "AgentHighLatencyP95",
+                    "severity": "warning"
+                },
+                "annotations": {
+                    "description": "p95 hi\u00e1\u00bb\u2021n t\u00e1\u00ba\u00a1i: 1.898s (SLO: < 1s)",
+                    "summary": "p95 latency /ask v\u00c6\u00b0\u00e1\u00bb\u00a3t 1 gi\u00c3\u00a2y"
+                },
+                "state": "firing",
+                "activeAt": "2026-11-25T08:15:42.401817116Z",
+                "value": "1.8981618577033879e+00"
+            },
+            {
+                "labels": {
+                    "alertname": "LLMCostBurnRateHigh",
+                    "severity": "warning"
+                },
+                "annotations": {
+                    "description": "T\u00e1\u00bb\u2018c \u00c4\u2018\u00e1\u00bb\u2122 chi ti\u00c3\u00aau hi\u00e1\u00bb\u2021n t\u00e1\u00ba\u00a1i: $3.10/gi\u00e1\u00bb\udc9d",
+                    "summary": "Chi ph\u00c3\u00ad LLM \u00c4\u2018ang v\u00c6\u00b0\u00e1\u00bb\u00a3t $2/gi\u00e1\u00bb\udc9d"
+                },
+                "state": "firing",
+                "activeAt": "2026-11-25T08:11:02.571501534Z",
+                "value": "3.1006510985072615e+00"
+            }
+        ]
+    }
+}

@@ -1,0 +1,7 @@
+[08:15:24Z +   2.3s] fault injected: MOCK_ERROR_RATE=0.2 MOCK_SLOW_RATE=0.3 (agents recreated)
+[08:15:24Z +   2.3s] LLMCostBurnRateHigh: firing (activeAt=2026-11-25T08:11:02.571501534Z, value=5.4234372016062675e+00)
+[08:15:49Z +  27.3s] AgentHighErrorRate: pending (activeAt=2026-11-25T08:15:42.401817116Z, value=8.875739644970415e-02)
+[08:15:49Z +  27.3s] AgentHighLatencyP95: pending (activeAt=2026-11-25T08:15:42.401817116Z, value=1.647916666666666e+00)
+[08:16:49Z +  87.3s] AgentHighErrorRate: firing (activeAt=2026-11-25T08:15:42.401817116Z, value=1.9460740880331356e-01)
+[08:16:49Z +  87.4s] ≥ 2 alerts firing
+[08:17:49Z] AgentHighErrorRate=firing AgentHighLatencyP95=firing LLMCostBurnRateHigh=firing

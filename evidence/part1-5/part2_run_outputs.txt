@@ -1,0 +1,46 @@
+$ docker run -d -p 8010:8000 my-agent:develop
+$ curl -i -X POST "http://localhost:8010/ask?question=What%20is%20Docker"
+HTTP/1.1 200 OK
+date: Wed, 25 Nov 2026 08:21:43 GMT
+server: uvicorn
+content-length: 103
+content-type: application/json
+
+{"answer":"Container là cách đóng gói app để chạy ở mọi nơi. Build once, run anywhere!"}
+
+### Exercise 2.4 — docker compose (02-docker/production)
+$ docker compose -p k5-day14-docker up -d
+ Container k5-day14-docker-qdrant-1 Healthy 
+ Container k5-day14-docker-redis-1 Healthy 
+ Container k5-day14-docker-agent-1 Starting 
+ Container k5-day14-docker-agent-1 Started 
+ Container k5-day14-docker-nginx-1 Starting 
+ Container k5-day14-docker-nginx-1 Started 
+agent | k5-day14-docker-agent | Up 8 seconds (healthy) | 8000/tcp
+nginx | nginx:alpine | Up 8 seconds | 0.0.0.0:80->80/tcp, [::]:80->80/tcp, 0.0.0.0:443->443/tcp, [::]:443->443/tcp
+qdrant | qdrant/qdrant:v1.9.0 | Up 19 seconds (healthy) | 6333-6334/tcp
+redis | redis:7-alpine | Up 19 seconds (healthy) | 6379/tcp
+$ curl -i http://localhost/health
+HTTP/1.1 200 OK
+Server: nginx
+Date: Wed, 25 Nov 2026 08:22:21 GMT
+Content-Type: application/json
+Content-Length: 95
+Connection: keep-alive
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+
+{"status":"ok","uptime_seconds":7.6,"version":"2.0.0","timestamp":"2026-11-25T08:22:21.476947"}
+$ curl -i -X POST http://localhost/ask -d {"question":"Explain microservices"}
+HTTP/1.1 200 OK
+Server: nginx
+Date: Wed, 25 Nov 2026 08:22:21 GMT
+Content-Type: application/json
+Content-Length: 126
+Connection: keep-alive
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+
+{"answer":"Đây là câu trả lời từ AI agent (mock). Trong production, đây sẽ là response từ OpenAI/Anthropic."}

@@ -1,0 +1,7 @@
+# Log JSON khớp trace chậm
+{"ts": "2026-11-25T08:14:09.401041+00:00", "level": "INFO", "service": "observable-agent", "instance": "1be33d3c945b", "event": "llm_call", "trace_id": "aea59795a72a1c453ee08e28d963f1ec", "span_id": "336e7e6837cff36d", "request_id": "a12a7f8f4cc1", "model": "mock-llm-small", "agent_version": "v2", "input_tokens": 74, "output_tokens": 37, "cost_usd": 3.3e-05, "llm_ms": 1693.8}
+{"ts": "2026-11-25T08:14:09.401570+00:00", "level": "INFO", "service": "observable-agent", "instance": "1be33d3c945b", "event": "http_request", "trace_id": "aea59795a72a1c453ee08e28d963f1ec", "span_id": "336e7e6837cff36d", "request_id": "a12a7f8f4cc1", "method": "POST", "route": "/ask", "status": 200, "ms": 1715.0}
+
+# Log JSON khớp trace lỗi
+{"ts": "2026-11-25T08:14:09.844935+00:00", "level": "INFO", "service": "observable-agent", "instance": "79d721e4737d", "event": "llm_error", "trace_id": "4a375788a2634f2fad7b45b5badba293", "span_id": "f75846fd078f4153", "request_id": "a58c44dc9e77", "error": "Upstream LLM error: 503 Service Unavailable (mock)"}
+{"ts": "2026-11-25T08:14:09.846249+00:00", "level": "INFO", "service": "observable-agent", "instance": "79d721e4737d", "event": "http_request", "trace_id": "4a375788a2634f2fad7b45b5badba293", "span_id": "f75846fd078f4153", "request_id": "a58c44dc9e77", "method": "POST", "route": "/ask", "status": 503, "ms": 133.9}

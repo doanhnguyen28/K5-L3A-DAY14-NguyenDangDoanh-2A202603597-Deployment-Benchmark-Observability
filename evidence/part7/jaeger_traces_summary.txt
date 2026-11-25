@@ -1,0 +1,10 @@
+== slow trace_id=aea59795a72a1c453ee08e28d963f1ec instance=1be33d3c945b
+   POST /ask                      1715.7 ms  status={}  {'http.status_code': '200'}  
+   agent.run                      1712.5 ms  status={}  {}  
+   agent.retrieve_context           17.9 ms  status={}  {}  
+   chat mock-llm-small            1694.5 ms  status={}  {'gen_ai.operation.name': 'chat', 'gen_ai.provider.name': 'mock', 'gen_ai.request.model': 'mock-llm-small', 'gen_ai.usage.input_tokens': '74', 'gen_ai.usage.output_tokens': '37'}  
+== err trace_id=4a375788a2634f2fad7b45b5badba293 instance=79d721e4737d
+   POST /ask                       135.0 ms  status={'code': 2}  {'http.status_code': '503'}  
+   agent.run                       131.9 ms  status={'message': 'LLMError: Upstream LLM error: 503 Service Unavailable (mock)', 'code': 2}  {}  ['exception:Upstream LLM error: 503 Service Unavailable (mock)']
+   agent.retrieve_context           15.3 ms  status={}  {}  
+   chat mock-llm-small             116.2 ms  status={'message': 'LLMError: Upstream LLM error: 503 Service Unavailable (mock)', 'code': 2}  {'gen_ai.operation.name': 'chat', 'gen_ai.provider.name': 'mock', 'gen_ai.request.model': 'mock-llm-small'}  ['exception:Upstream LLM error: 503 Service Unavailable (mock)']

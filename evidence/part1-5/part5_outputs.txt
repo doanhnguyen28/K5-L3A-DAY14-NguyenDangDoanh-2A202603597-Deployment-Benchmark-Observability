@@ -1,0 +1,98 @@
+### Exercise 5.1 — /health, /ready (develop, cổng 8010)
+$ curl -i /health
+HTTP/1.1 200 OK
+content-type: application/json
+
+{"status":"degraded","uptime_seconds":0.7,"version":"1.0.0","environment":"development","timestamp":"2026-11-25T08:23:28.661965+00:00","checks":{"memory":{"status":"degraded","used_percent":93.3}}}
+
+$ curl -i /ready
+HTTP/1.1 200 OK
+content-type: application/json
+
+{"ready":true,"in_flight_requests":1}
+
+
+### Exercise 5.2 — Graceful shutdown (chạy trong container Linux python:3.11-slim để gửi SIGTERM thật)
+[shell] kill -TERM 7
+[client] in-flight request -> HTTP 200 sau 3.01s: {"answer":"Đây là câu trả lời từ AI agent (mock). Trong production, đây sẽ là response từ OpenAI/Anthropic."}
+[shell] app exit code: 0
+--- app log:
+2026-11-25 08:23:29,721 INFO Starting agent on port 8000
+INFO:     Started server process [7]
+INFO:     Waiting for application startup.
+2026-11-25 08:23:29,744 INFO Agent starting up...
+2026-11-25 08:23:29,744 INFO Loading model and checking dependencies...
+2026-11-25 08:23:29,944 INFO ✅ Agent is ready!
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:58568 - "GET /health HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     127.0.0.1:58576 - "POST /ask?question=Long%20task HTTP/1.1" 200 OK
+INFO:     Waiting for application shutdown.
+2026-11-25 08:23:33,654 INFO 🔄 Graceful shutdown initiated...
+2026-11-25 08:23:33,654 INFO ✅ Shutdown complete
+INFO:     Application shutdown complete.
+INFO:     Finished server process [7]
+2026-11-25 08:23:33,655 INFO Received signal 15 — uvicorn will handle graceful shutdown
+
+### Exercise 5.4 — docker compose -p k5-day14-scaling up -d --build --scale agent=3
+k5-day14-scaling-agent-1 | Up 14 seconds (healthy) | 8000/tcp
+k5-day14-scaling-agent-2 | Up 14 seconds (healthy) | 8000/tcp
+k5-day14-scaling-agent-3 | Up 14 seconds (healthy) | 8000/tcp
+k5-day14-scaling-nginx-1 | Up 14 seconds | 0.0.0.0:8080->80/tcp, [::]:8080->80/tcp
+k5-day14-scaling-redis-1 | Up 25 seconds (healthy) | 6379/tcp
+
+### Exercise 5.5 — python test_stateless.py
+============================================================
+Stateless Scaling Demo
+============================================================
+
+Session ID: cfe1781a-fa67-4f42-980e-c1db988741f7
+
+Request 1: [instance-55fda7]
+  Q: What is Docker?
+  A: Container là cách đóng gói app để chạy ở mọi nơi. Build once, run anywhere!...
+
+Request 2: [instance-92ee1c]
+  Q: Why do we need containers?
+  A: Tôi là AI agent được deploy lên cloud. Câu hỏi của bạn đã được nhận....
+
+Request 3: [instance-f228f1]
+  Q: What is Kubernetes?
+  A: Đây là câu trả lời từ AI agent (mock). Trong production, đây sẽ là response từ O...
+
+Request 4: [instance-55fda7]
+  Q: How does load balancing work?
+  A: Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé....
+
+Request 5: [instance-92ee1c]
+  Q: What is Redis used for?
+  A: Đây là câu trả lời từ AI agent (mock). Trong production, đây sẽ là response từ O...
+
+------------------------------------------------------------
+Total requests: 5
+Instances used: {'instance-55fda7', 'instance-92ee1c', 'instance-f228f1'}
+✅ All requests served despite different instances!
+
+--- Conversation History ---
+Total messages: 10
+  [user]: What is Docker?...
+  [assistant]: Container là cách đóng gói app để chạy ở mọi nơi. Build once...
+  [user]: Why do we need containers?...
+  [assistant]: Tôi là AI agent được deploy lên cloud. Câu hỏi của bạn đã đư...
+  [user]: What is Kubernetes?...
+  [assistant]: Đây là câu trả lời từ AI agent (mock). Trong production, đây...
+  [user]: How does load balancing work?...
+  [assistant]: Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đ...
+  [user]: What is Redis used for?...
+  [assistant]: Đây là câu trả lời từ AI agent (mock). Trong production, đây...
+
+✅ Session history preserved across all instances via Redis!
+
+--- docker compose logs agent (trích, thấy request chia cho 3 instance)
+agent-3  | INFO:     172.20.0.6:35694 - "POST /chat HTTP/1.1" 200 OK
+agent-2  | INFO:     172.20.0.6:47888 - "POST /chat HTTP/1.1" 200 OK
+agent-3  | INFO:     172.20.0.6:35694 - "POST /chat HTTP/1.1" 200 OK
+agent-2  | INFO:     172.20.0.6:47888 - "GET /chat/cfe1781a-fa67-4f42-980e-c1db988741f7/history HTTP/1.1" 200 OK
+agent-1  | INFO:     172.20.0.6:40162 - "POST /chat HTTP/1.1" 200 OK
+agent-1  | INFO:     172.20.0.6:40162 - "POST /chat HTTP/1.1" 200 OK

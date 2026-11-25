@@ -1,0 +1,11 @@
+$ docker build -f 02-docker/develop/Dockerfile -t my-agent:develop .
+sha256:97ee35ef3550191bcb0b72713ced892303710d7eb5401e27e820b9215de5e9b5
+$ docker build -f 02-docker/production/Dockerfile -t my-agent:advanced .
+sha256:0536874ada54d7e186b5a7b8e1cd828b9bf5514c99861b998762ee59872b8487
+$ docker images my-agent
+REPOSITORY   TAG        SIZE
+my-agent     advanced   240MB
+my-agent     develop    1.67GB
+$ docker image inspect --format {{.Size}} (bytes)
+my-agent:develop 1667808589
+my-agent:advanced 239815330
